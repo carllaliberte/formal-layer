@@ -30,3 +30,6 @@ A missing `easycrypt` binary keeps the label honest: the theories
 are the specification. They are not theorems until the prover says so.
 
 See [INTERDIT.md](INTERDIT.md).
+
+Après pointe juge.v0 sur quelle : `os` n'est pas quantique. Le formal layer
+ne change pas de statut admitted.
