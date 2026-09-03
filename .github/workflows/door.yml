@@ -1,0 +1,30 @@
+name: door
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  honest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Honesty tests
+        run: python3 test_door.py
+      - name: juger.py deny
+        run: |
+          set +e
+          python3 juger.py > "${RUNNER_TEMP}/juger.json"
+          code=$?
+          set -e
+          test "$code" -eq 2
+          python3 -c "
+          import json, pathlib, os
+          p = pathlib.Path(os.environ['RUNNER_TEMP']) / 'juger.json'
+          v = json.loads(p.read_text())
+          assert v.get('format') == 'formal.v0'
+          assert v.get('proven') is False
+          assert v.get('decision') == 'deny'
+          "
+      - name: make admitted
+        run: make admitted
