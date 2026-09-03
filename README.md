@@ -57,5 +57,4 @@ make check
 
 See [INTERDIT.md](INTERDIT.md).
 
-Après pointe juge.v0 sur quelle : `os` n'est pas quantique. Le formal layer
-ne change pas de statut admitted.
+After [famille juge.v0](https://github.com/carllaliberte/famille/blob/main/schema/juge.v0.json), `quelle: os` is classique, not quantique. This layer stays `admitted`.
