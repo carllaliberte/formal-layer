@@ -94,12 +94,57 @@ def test_epsilon_zero_refused_in_source() -> None:
 def test_copy_forbids_formally_verified() -> None:
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     interdit = (ROOT / "INTERDIT.md").read_text(encoding="utf-8")
+    schema = (ROOT / "SCHEMA.md").read_text(encoding="utf-8")
     if FORBIDDEN not in readme:
         _fail("README.md must still name and forbid « formally verified »")
     if "Do not write" not in readme:
         _fail("README.md must forbid writing « formally verified »")
+    if "obligations only" not in readme:
+        _fail("README.md must state obligations only")
+    if "product claim" not in readme:
+        _fail("README.md must forbid « formally verified » as a product claim")
+    if "while a lemma is admitted" in readme:
+        _fail("README.md must not limit the ban to admitted lemmas")
     if FORBIDDEN not in interdit:
         _fail("INTERDIT.md must still forbid « formally verified »")
+    if "product claim" not in interdit:
+        _fail("INTERDIT.md must forbid the phrase as a product claim")
+    if "while a lemma is admitted" in interdit or "while a lemma is `admitted`" in interdit:
+        _fail("INTERDIT.md must not limit the ban to admitted lemmas")
+    if "obligations only" not in interdit:
+        _fail("INTERDIT.md must state obligations only")
+    if "Obligations only" not in schema:
+        _fail("SCHEMA.md must state obligations only")
+
+
+def test_product_files_do_not_claim_verified() -> None:
+    """Name the interdiction in the door copy. Never assert it as fact."""
+    may_name = {"README.md", "INTERDIT.md", "test_door.py"}
+    phrases = ("formally verified", "formal verification")
+    claimed = (
+        "is formally verified",
+        "are formally verified",
+        "has been formally verified",
+        "was formally verified",
+    )
+    for path in sorted(p for p in ROOT.iterdir() if p.is_file()):
+        if path.name in {"LICENSE"} or path.name.startswith("."):
+            continue
+        text = path.read_text(encoding="utf-8")
+        lower = text.lower()
+        if path.name not in may_name:
+            for phrase in phrases:
+                if phrase in lower:
+                    _fail(f"{path.name} must not contain {phrase!r}")
+        if path.name != "test_door.py":
+            for needle in claimed:
+                if needle in lower:
+                    _fail(f"{path.name} must not claim {needle!r}")
+    juger_src = (ROOT / "juger.py").read_text(encoding="utf-8")
+    if '"proven": False' not in juger_src:
+        _fail("juger.py must keep proven False in source")
+    if '"proven": True' in juger_src or '"proven": true' in juger_src:
+        _fail("juger.py must never set proven true")
 
 
 def main() -> int:
@@ -108,7 +153,8 @@ def main() -> int:
     test_missing_theory_denies_without_crash()
     test_epsilon_zero_refused_in_source()
     test_copy_forbids_formally_verified()
-    print("door tests: ok — files exist, proven false, ε=0 refused, copy honest")
+    test_product_files_do_not_claim_verified()
+    print("door tests: ok — files exist, proven false, ε=0 refused, obligations only")
     return 0
 
 

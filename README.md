@@ -8,7 +8,7 @@ Judgment = Carl. Preview of a claim is not a proof.
 Status of every lemma: `admitted`, unless a later commit replaces
 the admission with a checked script and a CI log.
 
-Do not write « formally verified » while a lemma is admitted.
+This layer carries obligations only. Do not write « formally verified » as a product claim. Formal verification is not a fact this door asserts.
 
 ## Claims (obligations)
 
