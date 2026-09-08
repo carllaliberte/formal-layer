@@ -9,3 +9,7 @@ This repository is couche 2. The MIT License in [LICENSE](LICENSE) applies to th
 QUANTUM is not licensed here.
 
 Acorn is not offered under the MIT License.
+
+Three regimes: ARR private (acorn, unforge, filon-noeud) / MIT map (famille) / public rails (this layer: code licensed, names not granted).
+See NOTICE.
+Marks are not licensed by MIT.
